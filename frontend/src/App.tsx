@@ -1,14 +1,21 @@
-import React from 'react'
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import theme from './theme/theme';
+import { AuthProvider } from './context/AuthContext';
+import AppRoutes from './routes/AppRoutes';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Welcome to Eventify</h1>
-        <p>Your event management platform</p>
-      </header>
-    </div>
-  )
-}
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
+};
 
-export default App
+export default App;

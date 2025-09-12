@@ -30,22 +30,22 @@
 
 ## Fase 2: Implementazione dell'autenticazione
 
-### Task 2.1: Modello utente e ruoli ⏳
-- Definisci lo schema utente con campi: email, password, nome, ruolo, googleId (opzionale)
-- Implementa i ruoli: user, organizer, admin
-- Crea i DTO (Data Transfer Objects) per la registrazione e il login
+### Task 2.1: Modello utente e ruoli ✅
+- Definisci lo schema utente con campi: email, password, nome, ruolo, googleId (opzionale) ✅
+- Implementa i ruoli: user, organizer, admin ✅
+- Crea i DTO (Data Transfer Objects) per la registrazione e il login ✅
 
-### Task 2.2: Autenticazione con email/password ⏳
-- Implementa l'endpoint di registrazione
-- Implementa l'endpoint di login
-- Configura la strategia JWT per l'autenticazione
-- Implementa il middleware di autenticazione
+### Task 2.2: Autenticazione con email/password ✅
+- Implementa l'endpoint di registrazione ✅
+- Implementa l'endpoint di login ✅
+- Configura la strategia JWT per l'autenticazione ✅
+- Implementa il middleware di autenticazione ✅
 
-### Task 2.3: Autenticazione con Google ⏳
-- Registra l'applicazione su Google Cloud Console
-- Ottieni le credenziali OAuth
-- Implementa l'endpoint per l'autenticazione Google
-- Gestisci il callback e la creazione/aggiornamento dell'utente
+### Task 2.3: Autenticazione con Google ✅
+- Registra l'applicazione su Google Cloud Console ✅
+- Ottieni le credenziali OAuth ✅
+- Implementa l'endpoint per l'autenticazione Google ✅
+- Gestisci il callback e la creazione/aggiornamento dell'utente ✅
 
 ### Task 2.4: Interfaccia di autenticazione frontend ⏳
 - Crea le pagine di login e registrazione

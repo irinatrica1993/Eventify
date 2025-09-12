@@ -8,26 +8,25 @@
 
 ## Fase 1: Setup e configurazione iniziale
 
-### Task 1.1: Configurazione del database MongoDB ⏳
+### Task 1.1: Configurazione del database MongoDB ✅
 - Accedi al tuo account MongoDB Atlas
 - Crea un nuovo cluster se non ne hai già uno
 - Configura un database chiamato "eventify"
 - Crea le collezioni principali: users, events, participations
 - Configura le regole di sicurezza e ottieni la stringa di connessione
 
-### Task 1.2: Configurazione del backend (NestJS) ⏳
+### Task 1.2: Configurazione del backend (NestJS) ✅
 - Configura il file di ambiente (.env) con:
-  - Stringa di connessione MongoDB
-  - Chiave segreta per JWT
-  - Credenziali OAuth per Google
-- Configura il modulo principale per la connessione al database
-- Imposta la struttura delle cartelle per i moduli auth, users, events, participations
+  - Stringa di connessione MongoDB ✅
+  - Chiave segreta per JWT ✅
+  - Credenziali OAuth per Google ⏳
+- Configura il modulo principale per la connessione al database ✅
+- Imposta la struttura delle cartelle per i moduli auth, users, events, participations ✅
 
-### Task 1.3: Configurazione del frontend (React/Vite) ⏳
-- Configura il file di ambiente (.env) con l'URL dell'API backend
-- Imposta il router per la navigazione tra le pagine
-- Configura il tema Material UI personalizzato
-- Imposta il context per la gestione dell'autenticazione
+### Task 1.3: Configurazione del frontend (React/Vite) ✅
+- Configura il file di ambiente (.env) con l'URL dell'API backend ✅
+- Imposta la struttura delle cartelle per il frontend ✅
+- Crea i file base per il router, il tema e il context di autenticazione ✅
 
 ## Fase 2: Implementazione dell'autenticazione
 

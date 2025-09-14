@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import PageContainer from '../../components/common/PageContainer';
 import AuthCard from '../../components/auth/AuthCard';
@@ -7,7 +7,6 @@ import RegisterForm from '../../components/auth/RegisterForm';
 import { useAuth } from '../../context/AuthContext';
 
 const RegisterPage: React.FC = () => {
-  const theme = useTheme();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
@@ -22,10 +21,12 @@ const RegisterPage: React.FC = () => {
     <PageContainer
       maxWidth={false}
       sx={{
-        background: `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.dark} 100%)`,
+        background: '#FFFFFF',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        minHeight: '100vh',
+        width: '100%',
       }}
     >
       <Box
@@ -33,7 +34,12 @@ const RegisterPage: React.FC = () => {
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
+          alignItems: 'center',
           p: 2,
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
         }}
       >
         <AuthCard title="Crea un nuovo account">

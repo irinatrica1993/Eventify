@@ -5,12 +5,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './events/events.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
     imports:[
         MongooseModule.forRoot(databaseConfig.uri, databaseConfig.options),
         AuthModule,
-        EventsModule,     
+        EventsModule,
+        UploadModule,     
     ],
     controllers:[AppController],
     providers:[AppService],

@@ -6,6 +6,11 @@ import GoogleCallbackPage from '../pages/auth/GoogleCallbackPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 
+// Importa le pagine degli eventi
+import EventsListPage from '../pages/events/EventsListPage';
+import EventDetailPage from '../pages/events/EventDetailPage';
+import EventFormPage from '../pages/events/EventFormPage';
+
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
@@ -17,7 +22,12 @@ const AppRoutes: React.FC = () => {
       {/* Rotte protette */}
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardPage />} />
-        {/* Altre rotte protette qui */}
+        
+        {/* Rotte per gli eventi */}
+        <Route path="/events" element={<EventsListPage />} />
+        <Route path="/events/:id" element={<EventDetailPage />} />
+        <Route path="/events/create" element={<EventFormPage />} />
+        <Route path="/events/:id/edit" element={<EventFormPage />} />
       </Route>
       
       {/* Reindirizzamento predefinito */}

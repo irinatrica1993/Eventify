@@ -47,11 +47,11 @@
 - Implementa l'endpoint per l'autenticazione Google ✅
 - Gestisci il callback e la creazione/aggiornamento dell'utente ✅
 
-### Task 2.4: Interfaccia di autenticazione frontend ⏳
-- Crea le pagine di login e registrazione
-- Implementa i form con validazione
-- Integra il pulsante di login con Google
-- Gestisci il token JWT e lo stato di autenticazione
+### Task 2.4: Interfaccia di autenticazione frontend ✅
+- Crea le pagine di login e registrazione ✅
+- Implementa i form con validazione ✅
+- Integra il pulsante di login con Google ✅
+- Gestisci il token JWT e lo stato di autenticazione ✅
 
 ## Fase 3: Gestione degli eventi
 

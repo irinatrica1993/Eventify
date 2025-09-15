@@ -13,9 +13,10 @@ const AuthCard: React.FC<AuthCardProps> = ({ title, children }) => {
       sx={{
         maxWidth: 450,
         width: '100%',
-        p: 3,
-        boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-        borderRadius: 3,
+        p: 4,
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+        borderRadius: 2,
+        border: '1px solid #f0f0f0',
       }}
     >
       <Box

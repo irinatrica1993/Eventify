@@ -1,36 +1,46 @@
 import React, { useEffect } from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Box, CircularProgress, Typography, Alert } from '@mui/material';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import PageContainer from '../../components/common/PageContainer';
 
 const GoogleCallbackPage: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const [error, setError] = React.useState<string | null>(null);
 
   useEffect(() => {
-    // Estrai il token dalla risposta
+    // Estrai i dati dalla query string
     const handleCallback = async () => {
       try {
-        // Il backend reindirizza qui con i dati dell'utente e il token
-        // Salviamo i dati nel localStorage
-        const userData = location.state;
+        const dataParam = searchParams.get('data');
         
-        if (userData && userData.token) {
-          localStorage.setItem('user', JSON.stringify(userData));
-          navigate('/dashboard');
+        if (dataParam) {
+          // Decodifica i dati dell'utente
+          const userData = JSON.parse(decodeURIComponent(dataParam));
+          
+          if (userData && userData.token) {
+            // Salva i dati nel localStorage
+            localStorage.setItem('user', JSON.stringify(userData));
+            
+            // Reindirizza alla dashboard
+            navigate('/dashboard');
+          } else {
+            setError('Token mancante nella risposta');
+            setTimeout(() => navigate('/login'), 3000);
+          }
         } else {
-          // Se non ci sono dati, significa che c'è stato un errore
-          console.error('Dati utente mancanti nel callback');
-          navigate('/login');
+          setError('Dati utente mancanti nella risposta');
+          setTimeout(() => navigate('/login'), 3000);
         }
       } catch (error) {
         console.error('Errore durante il callback di Google', error);
-        navigate('/login');
+        setError('Errore durante l\'autenticazione con Google');
+        setTimeout(() => navigate('/login'), 3000);
       }
     };
 
     handleCallback();
-  }, [location, navigate]);
+  }, [searchParams, navigate]);
 
   return (
     <PageContainer>
@@ -43,10 +53,23 @@ const GoogleCallbackPage: React.FC = () => {
           minHeight: '60vh',
         }}
       >
-        <CircularProgress size={60} />
-        <Typography variant="h6" sx={{ mt: 3 }}>
-          Autenticazione in corso...
-        </Typography>
+        {error ? (
+          <>
+            <Alert severity="error" sx={{ mb: 3, width: '100%', maxWidth: 400 }}>
+              {error}
+            </Alert>
+            <Typography variant="body1">
+              Verrai reindirizzato alla pagina di login tra pochi secondi...
+            </Typography>
+          </>
+        ) : (
+          <>
+            <CircularProgress size={60} />
+            <Typography variant="h6" sx={{ mt: 3 }}>
+              Autenticazione in corso...
+            </Typography>
+          </>
+        )}
       </Box>
     </PageContainer>
   );

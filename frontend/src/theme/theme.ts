@@ -12,29 +12,29 @@ declare module '@mui/material/styles' {
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#5E35B1', // Viola scuro
-      light: '#7E57C2',
-      dark: '#4527A0',
+      main: '#3f51b5', // Blu più elegante
+      light: '#757de8',
+      dark: '#002984',
       contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#FF5722', // Arancione
-      light: '#FF8A65',
-      dark: '#E64A19',
+      main: '#4caf50', // Verde
+      light: '#80e27e',
+      dark: '#087f23',
       contrastText: '#FFFFFF',
     },
     tertiary: {
-      main: '#00BCD4', // Azzurro
-      light: '#4DD0E1',
-      dark: '#0097A7',
+      main: '#2196f3', // Azzurro
+      light: '#6ec6ff',
+      dark: '#0069c0',
       contrastText: '#FFFFFF',
     },
     background: {
-      default: '#F5F5F5',
+      default: '#FFFFFF',
       paper: '#FFFFFF',
     },
     text: {
-      primary: '#212121',
+      primary: '#333333',
       secondary: '#757575',
     },
   },

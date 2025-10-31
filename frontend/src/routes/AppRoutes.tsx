@@ -10,6 +10,7 @@ import ProtectedRoute from '../components/auth/ProtectedRoute';
 import EventsListPage from '../pages/events/EventsListPage';
 import EventDetailPage from '../pages/events/EventDetailPage';
 import EventFormPage from '../pages/events/EventFormPage';
+import MyEventsPage from '../pages/events/MyEventsPage';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -25,9 +26,10 @@ const AppRoutes: React.FC = () => {
         
         {/* Rotte per gli eventi */}
         <Route path="/events" element={<EventsListPage />} />
-        <Route path="/events/:id" element={<EventDetailPage />} />
         <Route path="/events/create" element={<EventFormPage />} />
         <Route path="/events/:id/edit" element={<EventFormPage />} />
+        <Route path="/events/:id" element={<EventDetailPage />} />
+        <Route path="/my-events" element={<MyEventsPage />} />
       </Route>
       
       {/* Reindirizzamento predefinito */}

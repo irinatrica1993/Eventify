@@ -7,7 +7,6 @@ import {
   Paper, 
   Button, 
   Chip, 
-  Divider, 
   Avatar, 
   AvatarGroup,
   CircularProgress,
@@ -20,8 +19,11 @@ import {
 } from '@mui/material';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { updateEventStatus } from '../../utils/eventUtils';
 import { eventService } from '../../services/eventService';
-import { Event, User } from '../../types/event.types';
+import participationService from '../../services/participationService';
+import ParticipantsList from '../../components/events/ParticipantsList';
+import { Event } from '../../types/event.types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -66,7 +68,21 @@ const EventDetailPage: React.FC = () => {
     
     try {
       const eventData = await eventService.getEventById(id);
-      setEvent(eventData);
+      
+      // Aggiorna lo stato dell'evento in base alla data
+      const updatedEvent = updateEventStatus(eventData);
+      
+      // Se lo stato è cambiato, aggiorna l'evento sul server
+      if (updatedEvent.status !== eventData.status) {
+        try {
+          await eventService.updateEvent(id, { status: updatedEvent.status });
+          console.log(`Stato dell'evento ${id} aggiornato da ${eventData.status} a ${updatedEvent.status}`);
+        } catch (error) {
+          console.error(`Errore nell'aggiornamento dello stato dell'evento ${id}:`, error);
+        }
+      }
+      
+      setEvent(updatedEvent);
       
       // Controlla se l'utente corrente è l'organizzatore
       if (currentUser) {
@@ -84,9 +100,19 @@ const EventDetailPage: React.FC = () => {
         
         setIsParticipant(isUserParticipant);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Errore nel recupero dei dettagli dell\'evento:', err);
-      setError('Si è verificato un errore nel recupero dei dettagli dell\'evento. Riprova più tardi.');
+      
+      // Gestione specifica per errore 403 (non autorizzato)
+      if (err.response && err.response.status === 403) {
+        if (!currentUser) {
+          setError('Devi effettuare il login per visualizzare questo evento.');
+        } else {
+          setError('Non hai i permessi per visualizzare questo evento privato.');
+        }
+      } else {
+        setError('Si è verificato un errore nel recupero dei dettagli dell\'evento. Riprova più tardi.');
+      }
     } finally {
       setLoading(false);
     }
@@ -110,8 +136,9 @@ const EventDetailPage: React.FC = () => {
     setJoinLoading(true);
     
     try {
-      const updatedEvent = await eventService.joinEvent(id);
-      setEvent(updatedEvent);
+      await participationService.joinEvent(id);
+      // Ricarica i dettagli dell'evento per aggiornare la lista dei partecipanti
+      await fetchEventDetails();
       setIsParticipant(true);
     } catch (err: any) {
       console.error('Errore nella partecipazione all\'evento:', err);
@@ -128,8 +155,9 @@ const EventDetailPage: React.FC = () => {
     setJoinLoading(true);
     
     try {
-      const updatedEvent = await eventService.leaveEvent(id);
-      setEvent(updatedEvent);
+      await participationService.leaveEvent(id);
+      // Ricarica i dettagli dell'evento per aggiornare la lista dei partecipanti
+      await fetchEventDetails();
       setIsParticipant(false);
     } catch (err: any) {
       console.error('Errore nell\'abbandono dell\'evento:', err);
@@ -224,9 +252,20 @@ const EventDetailPage: React.FC = () => {
         <Alert severity="error" sx={{ mb: 3 }}>
           {error}
         </Alert>
-        <Button variant="outlined" onClick={() => navigate('/events')}>
-          Torna agli eventi
-        </Button>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <Button variant="outlined" onClick={() => navigate('/events')}>
+            Torna agli eventi
+          </Button>
+          {!currentUser && (
+            <Button 
+              variant="contained" 
+              color="primary" 
+              onClick={() => navigate('/login', { state: { from: `/events/${id}` } })}
+            >
+              Accedi
+            </Button>
+          )}
+        </Box>
       </Container>
     );
   }
@@ -431,6 +470,11 @@ const EventDetailPage: React.FC = () => {
             </Typography>
           )}
         </Box>
+        
+        {/* Lista dettagliata dei partecipanti (solo per l'organizzatore) */}
+        {isOrganizer && id && (
+          <ParticipantsList eventId={id} isOrganizer={isOrganizer} />
+        )}
       </Paper>
       
       {/* Dialog di conferma eliminazione */}

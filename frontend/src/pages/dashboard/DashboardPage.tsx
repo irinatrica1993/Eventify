@@ -1,16 +1,44 @@
-import React from 'react';
-import { Box, Typography, Button, Grid, Avatar } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Button, Grid, Avatar, Badge, Divider } from '@mui/material';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { eventService } from '../../services/eventService';
+import participationService from '../../services/participationService';
 import EventIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import EventifyLogo from '../../components/common/EventifyLogo';
 import DashboardCard from '../../components/dashboard/DashboardCard';
+import OrganizerStats from '../../components/dashboard/OrganizerStats';
 
 const DashboardPage: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [eventsCount, setEventsCount] = useState<number>(0);
+  const [participationsCount, setParticipationsCount] = useState<number>(0);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Carica gli eventi organizzati dall'utente
+        if (user?.id) {
+          // Se l'utente è un organizzatore o admin, carica gli eventi organizzati
+          if (user.role === 'organizer' || user.role === 'admin') {
+            const organizedEvents = await eventService.getEventsByOrganizer(user.id);
+            setEventsCount(organizedEvents.length);
+          }
+          
+          // Carica le partecipazioni dell'utente (per tutti i tipi di utente)
+          const participations = await participationService.getMyParticipations();
+          setParticipationsCount(participations.length);
+        }
+      } catch (error) {
+        console.error('Errore nel caricamento dei dati:', error);
+      }
+    };
+    
+    fetchData();
+  }, [user]);
 
   const handleLogout = () => {
     logout();
@@ -55,9 +83,20 @@ const DashboardPage: React.FC = () => {
                 gap: 1,
                 color: 'text.secondary',
               }}>
-                <Typography variant="body2" sx={{ mr: 1, display: { xs: 'none', sm: 'block' } }}>
-                  {user?.name}
-                </Typography>
+                <Box sx={{ flexDirection: 'column', alignItems: 'flex-end', mr: 1, display: { xs: 'none', sm: 'flex' } }}>
+                  <Typography variant="body2">
+                    {user?.name}
+                  </Typography>
+                  <Typography variant="caption" sx={{ 
+                    color: 'text.secondary',
+                    bgcolor: user?.role === 'organizer' ? 'rgba(25, 118, 210, 0.1)' : user?.role === 'admin' ? 'rgba(211, 47, 47, 0.1)' : 'rgba(76, 175, 80, 0.1)', 
+                    px: 1, 
+                    borderRadius: 1,
+                    textTransform: 'capitalize'
+                  }}>
+                    {user?.role === 'organizer' ? 'Organizzatore' : user?.role === 'admin' ? 'Amministratore' : 'Utente'}
+                  </Typography>
+                </Box>
                 <Avatar sx={{ 
                   width: 32, 
                   height: 32, 
@@ -124,6 +163,13 @@ const DashboardPage: React.FC = () => {
         </Box>
       </Box>
 
+      {/* Statistiche per organizzatori */}
+      {(user?.role === 'organizer' || user?.role === 'admin') && user?.id && (
+        <Box sx={{ width: '100%', px: { xs: 2, sm: 4 }, mb: 4 }}>
+          <OrganizerStats userId={user.id} />
+        </Box>
+      )}
+      
       {/* Card degli eventi */}
       <Grid
         container
@@ -137,15 +183,21 @@ const DashboardPage: React.FC = () => {
           my: 0
         }}
       >
+        {/* Card "I tuoi eventi" - ora visibile per tutti gli utenti */}
         <Grid item xs={12} sm={6} md={4} lg={3}>
-          <DashboardCard
-            title="I tuoi eventi"
-            description="Gestisci gli eventi che hai creato"
-            icon={<EventIcon />}
-            iconColor="primary.main"
-            sx={{ height: '100%' }}
-          />
+          <Badge badgeContent={eventsCount} color="primary" max={99} sx={{ width: '100%', height: '100%' }}>
+            <DashboardCard
+              title="I tuoi eventi"
+              description="Gestisci gli eventi che hai creato"
+              icon={<EventIcon />}
+              iconColor="primary.main"
+              sx={{ height: '100%', width: '100%' }}
+              onClick={() => navigate('/my-events?tab=1')}
+            />
+          </Badge>
         </Grid>
+        
+        {/* Card "Eventi disponibili" - visibile per tutti */}
         <Grid item xs={12} sm={6} md={4} lg={3}>
           <DashboardCard
             title="Eventi disponibili"
@@ -153,16 +205,22 @@ const DashboardPage: React.FC = () => {
             icon={<CalendarTodayIcon />}
             iconColor="secondary.main"
             sx={{ height: '100%' }}
+            onClick={() => navigate('/events')}
           />
         </Grid>
+        
+        {/* Card "Partecipazioni" - visibile per tutti */}
         <Grid item xs={12} sm={6} md={4} lg={3}>
-          <DashboardCard
-            title="Partecipazioni"
-            description="Gestisci le tue partecipazioni agli eventi"
-            icon={<PeopleIcon />}
-            iconColor="#2196f3"
-            sx={{ height: '100%' }}
-          />
+          <Badge badgeContent={participationsCount} color="primary" max={99} sx={{ width: '100%', height: '100%' }}>
+            <DashboardCard
+              title="Partecipazioni"
+              description="Gestisci le tue partecipazioni agli eventi"
+              icon={<PeopleIcon />}
+              iconColor="#2196f3"
+              sx={{ height: '100%', width: '100%' }}
+              onClick={() => navigate('/my-events?tab=0')}
+            />
+          </Badge>
         </Grid>
       </Grid>
       </Box>

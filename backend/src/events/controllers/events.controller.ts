@@ -37,10 +37,9 @@ export class EventsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: string, @Request() req) {
-    // Pass user if authenticated, otherwise pass undefined
-    const user = req.user ? req.user : undefined;
-    return this.eventsService.findOne(id, user);
+    return this.eventsService.findOne(id, req.user);
   }
 
   @Patch(':id')

@@ -39,3 +39,7 @@ lerna-debug.log*
 
 # TypeScript
 *.tsbuildinfo
+
+# Uploads (user-generated content)
+backend/uploads/*
+!backend/uploads/.gitkeep

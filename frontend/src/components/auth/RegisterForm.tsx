@@ -39,7 +39,8 @@ const RegisterForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      await register({ name, email, password });
+      // Tutti gli utenti avranno il ruolo 'user' che potrà fare tutto
+      await register({ name, email, password, role: 'user' });
     }
   };
 
@@ -128,6 +129,8 @@ const RegisterForm: React.FC = () => {
         disabled={isLoading}
         error={!!passwordError}
       />
+      
+      {/* La selezione del ruolo è stata rimossa, tutti gli utenti avranno accesso a tutte le funzionalità */}
       
       <Button
         type="submit"

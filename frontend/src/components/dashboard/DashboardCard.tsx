@@ -7,6 +7,7 @@ interface DashboardCardProps {
   icon: ReactNode;
   iconColor?: string;
   sx?: SxProps<Theme>;
+  onClick?: () => void;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -15,6 +16,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   icon,
   iconColor = 'primary',
   sx = {},
+  onClick,
 }) => {
   return (
     <Paper
@@ -31,9 +33,11 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
         '&:hover': {
           transform: 'translateY(-3px)',
           boxShadow: '0 8px 15px rgba(0,0,0,0.08)',
+          cursor: onClick ? 'pointer' : 'default',
         },
         ...sx,
       }}
+      onClick={onClick}
     >
       <Box sx={{ color: iconColor, fontSize: 60, mb: 2 }}>{icon}</Box>
       <Typography variant="h5" component="h2" gutterBottom align="center">

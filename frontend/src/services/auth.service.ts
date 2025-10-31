@@ -6,6 +6,7 @@ export interface RegisterData {
   email: string;
   password: string;
   name: string;
+  role?: string; // Opzionale per mantenere la compatibilità con il codice esistente
 }
 
 export interface LoginData {
